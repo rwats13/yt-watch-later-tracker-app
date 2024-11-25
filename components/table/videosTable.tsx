@@ -1,7 +1,18 @@
 import { IVideo } from "@/app/interfaces";
 import VideoEntry from "./videoEntry";
+import { filterData } from "@/app/dataFunctions";
 
-export default function VideosTable({ data }: { data: Array<IVideo> }) {
+export default async function VideosTable({
+  data,
+  query,
+  currentPage,
+}: {
+  data: Array<IVideo>;
+  query: string;
+  currentPage: number;
+}) {
+  const filteredData = await filterData(data, query, currentPage);
+
   return (
     <table>
       <thead>
@@ -14,7 +25,7 @@ export default function VideosTable({ data }: { data: Array<IVideo> }) {
         </tr>
       </thead>
       <tbody>
-        {data.map((video: IVideo) => (
+        {filteredData.map((video: IVideo) => (
           <VideoEntry
             title={video.title}
             duration={video.duration}
